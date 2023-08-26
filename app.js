@@ -6,6 +6,7 @@ const router = require('./routes');
 const auth = require('./middlewares/auth');
 const errorHandler = require('./middlewares/errorHandler');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
+require('dotenv').config();
 
 const { PORT = 3000 } = process.env;
 
@@ -27,8 +28,7 @@ const singUpRoutes = require('./routes/signup');
 // обработка CORS запросов:
 // Массив доменов, с которых разрешены кросс-доменные запросы
 const allowedCors = [
-  // 'https://kseniia-mesto.nomoreparties.sbs',
-  // 'https://ksenia-mesto.nomoreparties.sbs',
+  'https://api.diploma-kseniia.nomoredomainsicu.ru/',
   'http://localhost:3000',
   'http://localhost:3001',
 ];

@@ -3,6 +3,9 @@ const isUrl = require('validator/lib/isURL');
 const User = require('./user');
 
 const movieSchema = new mongoose.Schema({
+  _id: {
+    type: Number,
+  },
   country: {
     type: String,
     required: true,

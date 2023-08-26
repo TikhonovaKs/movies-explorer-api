@@ -13,12 +13,13 @@ const getMovies = (req, res, next) => {
 const createMovie = (req, res, next) => {
   Movie.create({
     ...req.body,
+    _id: req.body.movieId,
     owner: req.user._id,
   })
     .then((movie) => res.send({ movie }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new BadRequestError('Incorrect data passed during movie updating'));
+        next(new BadRequestError(`Incorrect data passed during movie updating ${err.message}`));
       } else {
         next(err);
       }
