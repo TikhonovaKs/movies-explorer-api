@@ -3,7 +3,6 @@ const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const { errors } = require('celebrate');
 const router = require('./routes');
-const auth = require('./middlewares/auth');
 const errorHandler = require('./middlewares/errorHandler');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 require('dotenv').config();
@@ -65,9 +64,6 @@ app.get('/crash-test', () => {
 app.use(express.json());
 
 app.use(cookieParser());
-
-// защищаем авторизацией все роуты кроме singIn и singUp
-app.use(auth);
 
 app.use(router);
 

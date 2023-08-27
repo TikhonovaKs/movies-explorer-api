@@ -5,7 +5,7 @@ const ForbiddenError = require('../errors/forbidden-err');
 const NotFoundError = require('../errors/not-found-err');
 
 const getMovies = (req, res, next) => {
-  Movie.find({})
+  Movie.find({ owner: req.user._id })
     .then((movie) => res.send({ movie }))
     .catch(next);
 };
@@ -13,7 +13,6 @@ const getMovies = (req, res, next) => {
 const createMovie = (req, res, next) => {
   Movie.create({
     ...req.body,
-    _id: req.body.movieId,
     owner: req.user._id,
   })
     .then((movie) => res.send({ movie }))
@@ -37,7 +36,7 @@ const deleteMovieById = (req, res, next) => {
         throw new ForbiddenError('You are not allowed to delete this movie');
       }
       // Если все проверки пройдены успешно, удаляем фильм
-      return Movie.findByIdAndRemove(req.params.id);
+      return Movie.findByIdAndRemove(movie._id);
     })
     .then((deletedMovie) => {
       res.send({ movie: deletedMovie });

@@ -103,9 +103,9 @@ const updateUser = (req, res, next) => {
     },
   )
     .then((user) => {
-      if (user) return res.send({ user });
-
-      throw new NotFoundError('User with this id not found');
+      if (user) { return res.send({ user }); }
+      next(new NotFoundError('User with this id not found'));
+      return null;
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
