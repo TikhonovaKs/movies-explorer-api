@@ -8,22 +8,16 @@ const errorHandler = require('./middlewares/errorHandler');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 require('dotenv').config();
 
-const { PORT = 3000 } = process.env;
-
-const NotFoundError = require('./errors/not-found-err');
+const { PORT = 3000, DB_URL = 'mongodb://127.0.0.1:27017/bitfilmsdb' } = process.env;
 
 const app = express();
 
 // подключаемся к серверу mongo
-mongoose.connect('mongodb://127.0.0.1:27017/mestodb', {
+mongoose.connect(DB_URL, {
   useNewUrlParser: true,
 });
 
 app.use(requestLogger); // подключаем логгер запросов
-
-// импорт роутов signin и signup
-const singInRoutes = require('./routes/signin');
-const singUpRoutes = require('./routes/signup');
 
 // обработка CORS запросов:
 // Массив доменов, с которых разрешены кросс-доменные запросы
@@ -70,17 +64,12 @@ app.get('/crash-test', () => {
 // устанавливает middleware для парсинга JSON-тела запросов
 app.use(express.json());
 
-app.use('/', singInRoutes);
-app.use('/', singUpRoutes);
-
 app.use(cookieParser());
 
 // защищаем авторизацией все роуты кроме singIn и singUp
 app.use(auth);
 
 app.use(router);
-
-app.use((req, res, next) => next(new NotFoundError('Route not found')));
 
 app.use(errorLogger); // подключаем логгер ошибок
 app.use(errors()); // обработчик ошибок celebrate
